@@ -182,7 +182,7 @@
 
     var curp = [
       posicion_1_4,
-      param.fecha_nacimiento[2] - 1900,
+      pad(param.fecha_nacimiento[2] - 1900),
       pad(param.fecha_nacimiento[1]),
       pad(param.fecha_nacimiento[0]),
       param.sexo.toUpperCase(),
