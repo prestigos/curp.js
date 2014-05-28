@@ -58,7 +58,7 @@
 
   /**
   * primerConsonante()
-  * Saca la primer consonate interna del string, y la devuelve.
+  * Saca la primer consonante interna del string, y la devuelve.
   * Si no hay una consonante interna, devuelve X.
   * @param {string} str - String del cual se va a sacar la primer consonante.
   */
@@ -91,7 +91,7 @@
 
   /**
   * agregaDigitoVerificador()
-  * Agrega el digito que se usa para validar el CURP.
+  * Agrega el dígito que se usa para validar el CURP.
   * @param {string} curp_str - String que contiene al menos los primeros 17 caracteres del CURP.
   */
   function agregaDigitoVerificador(curp_str) {
@@ -102,8 +102,8 @@
       'J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'
     ];
 
-    // Convierte el curp a un arreglo de numeros, usando la posicion de cada
-    // caracter, dentro del arreglo `caracteres`.
+    // Convierte el curp a un arreglo de números, usando la posición de cada
+    // carácter, dentro del arreglo `caracteres`.
     var curpNumerico = curp.map(function(caracter) {
       return caracteres.indexOf(caracter);
     });
@@ -124,16 +124,16 @@
 
   /**
   * generaCurp()
-  * Funcion principal que genera el CURP.
-  * @param {object} param - Objeto que tiene los parametros necesarios para poder generar el curp,
+  * Función principal que genera el CURP.
+  * @param {object} param - Objeto que tiene los parámetros necesarios para poder generar el curp,
   * Las propiedasdes del objeto param son:
   * @param {string} nombre - Nombre(s).
   * @param {string} apellido_paterno - Apellido materno.
   * @param {string} apellido_materno - Apellido materno. En caso de haber conjunciones en los apellidos, estas deben ir aqui.
   * @param {string} sexo - Sexo. H para hombre, M para mujer.
   * @param {string} estado - Estado, usando las abreviaturas oficiales.
-  * @param {array} fecha_nacimiento - Arreglo con [ dia, mes, año ], cada uno como numero.
-  * @param {string} [homonimia] - Opcional. Valor usado para evitar repeticiones, es asignado por gobernacion.
+  * @param {array} fecha_nacimiento - Arreglo con [ día, mes, año ], cada uno como numero.
+  * @param {string} [homonimia] - Opcional. Valor usado para evitar repeticiones, es asignado por gobernación.
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
@@ -146,8 +146,8 @@
     param.apellido_paterno = param.apellido_paterno.trim().toUpperCase();
     param.apellido_materno = param.apellido_materno.trim().toUpperCase();
 
-    // La inical del primer nombre, o, si tiene mas de 1 nombre Y el primer
-    // nombre es uno de la lista de nombrs comunes, la inicial del segundo nombre
+    // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
+    // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
     var inicial_nombre = (function(nombre) {
       var comunes, nombres, primerNombreEsComun;
       comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
@@ -177,7 +177,7 @@
     var posicion_14_16 = [
       primerConsonante(param.apellido_paterno),
       primerConsonante(param.apellido_materno),
-      primerConsonante(param.nombre),
+      primerConsonante(param.nombre)
     ].join('');
 
     var curp = [
@@ -194,7 +194,7 @@
   }
 
   // Si es un navegador, exporta 'generaCurp' a una variable global.
-  // Si es node.js, exporta esa funcion en module.exports
+  // Si es node.js, exporta esa función en module.exports
   if( module !== undefined && module.exports ) {
     module.exports = generaCurp;
   } else {
