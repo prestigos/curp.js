@@ -129,7 +129,8 @@
   * Las propiedasdes del objeto param son:
   * @param {string} nombre - Nombre(s).
   * @param {string} apellido_paterno - Apellido materno.
-  * @param {string} apellido_materno - Apellido materno. En caso de haber conjunciones en los apellidos, estas deben ir aqui.
+  * @param {string} apellido_materno - Apellido materno.
+  * En caso de haber conjunciones en los apellidos, estas deben ir aqui.
   * @param {string} sexo - Sexo. H para hombre, M para mujer.
   * @param {string} estado - Estado, usando las abreviaturas oficiales.
   * @param {array} fecha_nacimiento - Arreglo con [ día, mes, año ], cada uno como numero.
@@ -195,7 +196,7 @@
 
   // Si es un navegador, exporta 'generaCurp' a una variable global.
   // Si es node.js, exporta esa función en module.exports
-  if( module !== undefined && module.exports ) {
+  if(typeof module !== 'undefined' && module.exports ) {
     module.exports = generaCurp;
   } else {
     global.generaCurp = generaCurp;
