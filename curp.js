@@ -39,7 +39,7 @@
       'KOJI', 'VAKA', 'KOJO', 'VUEI', 'KOLA', 'VUEY', 'KULO', 'WUEI', 'LILO', 'WUEY',
       'LOCA' ];
     if(inconvenientes.indexOf(str) > -1) {
-      str = str.replace(/^(.)./, '$1X');
+      str = str.replace(/^(\w)\w/, '$1X');
     }
     return str;
   }
@@ -114,23 +114,25 @@
   */
   function agregaDigitoVerificador(curp_str) {
     // Convierte el CURP en un arreglo
-    var curp = curp_str.substring(0,17).toUpperCase().split('');
-    var caracteres  = [
+    var curp, caracteres, curpNumerico, suma, digito;
+
+    curp = curp_str.substring(0,17).toUpperCase().split('');
+    caracteres  = [
       '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I',
       'J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'
     ];
 
     // Convierte el curp a un arreglo de números, usando la posición de cada
     // carácter, dentro del arreglo `caracteres`.
-    var curpNumerico = curp.map(function(caracter) {
+    curpNumerico = curp.map(function(caracter) {
       return caracteres.indexOf(caracter);
     });
 
-    var suma = curpNumerico.reduce(function(prev, valor, indice) {
+    suma = curpNumerico.reduce(function(prev, valor, indice) {
       return prev + (valor * (18 - indice));
     }, 0);
 
-    var digito = (10 - (suma % 10));
+    digito = (10 - (suma % 10));
 
     if(digito === 10) {
       digito = 0;
@@ -156,6 +158,7 @@
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
+    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp;
 
     if(!estadoValido(param.estado)) {
       return false;
@@ -167,7 +170,7 @@
 
     // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
     // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
-    var inicial_nombre = (function(nombre) {
+    inicial_nombre = (function(nombre) {
       var comunes, nombres, primerNombreEsComun;
       comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
       nombres = nombre.toUpperCase().trim().split(/\s+/);
@@ -181,10 +184,10 @@
       }
     }(param.nombre));
 
-    var vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0,1);
+    vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0,1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
 
-    var posicion_1_4 = [
+    posicion_1_4 = [
       param.apellido_paterno.substring(0, 1),
       vocal_apellido,
       param.apellido_materno.substring(0, 1),
@@ -193,13 +196,13 @@
 
     posicion_1_4 = filtraInconvenientes(filtraCaracteres(posicion_1_4));
 
-    var posicion_14_16 = [
+    posicion_14_16 = [
       primerConsonante(param.apellido_paterno),
       primerConsonante(param.apellido_materno),
       primerConsonante(param.nombre)
     ].join('');
 
-    var curp = [
+    curp = [
       posicion_1_4,
       pad(param.fecha_nacimiento[2] - 1900),
       pad(param.fecha_nacimiento[1]),
