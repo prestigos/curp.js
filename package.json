@@ -1,6 +1,6 @@
 {
   "name": "curp.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Función para generar el CURP, de acuerdo a las especificaciones oficiales.",
   "main": "curp.js",
   "scripts": {
