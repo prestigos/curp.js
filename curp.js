@@ -52,6 +52,7 @@
    * Cuando el nombre o los apellidos son compuestos y tienen
    * proposiciones, contracciones o conjunciones, se deben eliminar esas palabras
    * a la hora de calcular el CURP.
+   * @param {string} str - String donde se eliminarán las partes que lo hacen compuesto
    */
   function ajustaCompuesto(str) {
     var compuestos = [ /\bDA\b/, /\bDAS\b/, /\bDE\b/, /\bDEL\b/, /\bDER\b/, /\bDI\b/,
@@ -171,9 +172,9 @@
       return false;
     }
 
-    param.nombre = ajustaCompuesto(param.nombre).trim().toUpperCase();
-    param.apellido_paterno = ajustaCompuesto(param.apellido_paterno).trim().toUpperCase();
-    param.apellido_materno = ajustaCompuesto(param.apellido_materno).trim().toUpperCase();
+    param.nombre = ajustaCompuesto(param.nombre.toUpperCase()).trim();
+    param.apellido_paterno = ajustaCompuesto(param.apellido_paterno.toUpperCase()).trim();
+    param.apellido_materno = ajustaCompuesto(param.apellido_materno.toUpperCase()).trim();
 
     // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
     // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
