@@ -45,6 +45,24 @@
   }
 
   /**
+   * ajustaCompuesto()
+   * Cuando el nombre o los apellidos son compuestos y tienen
+   * proposiciones, contracciones o conjunciones, se deben eliminar esas palabras
+   * a la hora de calcular el CURP.
+   */
+  function ajustaCompuesto(str) {
+    var compuestos = [ /\bDA\b/, /\bDAS\b/, /\bDE\b/, /\bDEL\b/, /\bDER\b/, /\bDI\b/,
+        /\bDIE\b/, /\bDD\b/,/\bEL\b/, /\bLA\b/, /\bLOS\b/, /\bLAS\b/, /\bLE\b/,
+        /\bLES\b/, /\bMAC\b/, /\bMC\b/, /\bVAN\b/, /\bVON\b/, /\bY\b/ ];
+    compuestos.forEach(function (compuesto) {
+      if(compuesto.test(str)) {
+        str = str.replace(compuesto, '');
+      }
+    });
+    return str;
+  }
+
+  /**
   * zeropad()
   * Rellena con ceros un string, para que quede de un ancho determinado.
   * @param {number} ancho - Ancho deseado.
@@ -143,9 +161,9 @@
       return false;
     }
 
-    param.nombre = param.nombre.trim().toUpperCase();
-    param.apellido_paterno = param.apellido_paterno.trim().toUpperCase();
-    param.apellido_materno = param.apellido_materno.trim().toUpperCase();
+    param.nombre = ajustaCompuesto(param.nombre).trim().toUpperCase();
+    param.apellido_paterno = ajustaCompuesto(param.apellido_paterno).trim().toUpperCase();
+    param.apellido_materno = ajustaCompuesto(param.apellido_materno).trim().toUpperCase();
 
     // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
     // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
