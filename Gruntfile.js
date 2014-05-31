@@ -1,7 +1,7 @@
-/* jslint node: true */
+/*jslint node: true, indent:2*/
 "use strict";
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({

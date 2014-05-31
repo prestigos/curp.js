@@ -1,4 +1,5 @@
-(function(global) {
+/*jslint indent:2, regexp:true*/
+(function (global) {
   'use strict';
   /**
     curp.js
@@ -38,9 +39,11 @@
       'KAKO', 'SENO', 'KOGE', 'TETA', 'KOGI', 'VACA', 'KOJA', 'VAGA', 'KOJE', 'VAGO',
       'KOJI', 'VAKA', 'KOJO', 'VUEI', 'KOLA', 'VUEY', 'KULO', 'WUEI', 'LILO', 'WUEY',
       'LOCA' ];
-    if(inconvenientes.indexOf(str) > -1) {
+
+    if (inconvenientes.indexOf(str) > -1) {
       str = str.replace(/^(\w)\w/, '$1X');
     }
+
     return str;
   }
 
@@ -52,13 +55,15 @@
    */
   function ajustaCompuesto(str) {
     var compuestos = [ /\bDA\b/, /\bDAS\b/, /\bDE\b/, /\bDEL\b/, /\bDER\b/, /\bDI\b/,
-        /\bDIE\b/, /\bDD\b/,/\bEL\b/, /\bLA\b/, /\bLOS\b/, /\bLAS\b/, /\bLE\b/,
+        /\bDIE\b/, /\bDD\b/, /\bEL\b/, /\bLA\b/, /\bLOS\b/, /\bLAS\b/, /\bLE\b/,
         /\bLES\b/, /\bMAC\b/, /\bMC\b/, /\bVAN\b/, /\bVON\b/, /\bY\b/ ];
+
     compuestos.forEach(function (compuesto) {
-      if(compuesto.test(str)) {
+      if (compuesto.test(str)) {
         str = str.replace(compuesto, '');
       }
     });
+
     return str;
   }
 
@@ -69,7 +74,8 @@
   * @param {number} num - Numero que sera procesado.
   */
   function zeropad(ancho, num) {
-    var pad = Array.apply(0, Array.call(0, ancho)).map(function() { return 0; }).join('');
+    var pad = Array.apply(0, Array.call(0, ancho)).map(function () { return 0; }).join('');
+
     return (pad + num).replace(new RegExp('^.*([0-9]{' + ancho + '})$'), '$1');
   }
   var pad = zeropad.bind(null, 2);
@@ -81,7 +87,7 @@
   * @param {string} str - String del cual se va a sacar la primer consonante.
   */
   function primerConsonante(str) {
-    str = str.trim().substring(1).replace(/[AEIOU]/ig, '').substring(0,1);
+    str = str.trim().substring(1).replace(/[AEIOU]/ig, '').substring(0, 1);
     return (str === '') ? 'X' : str;
   }
 
@@ -91,7 +97,7 @@
   * @param {string} str - String el cual sera convertido.
   */
   function filtraCaracteres(str) {
-    return str.toUpperCase().replace(/[^A-Z]/g, 'X');
+    return str.toUpperCase().replace(/[\d_\-\.\/\\,]/g, 'X');
   }
 
   /**
@@ -100,41 +106,42 @@
   * @param {string} str - String con el estado.
   */
   function estadoValido(str) {
-    var estado = [ 'AS', 'BC', 'BS', 'CC', 'CS', 'CH', 'CL', 'CM', 'DF',
-      'DG', 'GT', 'GR', 'HG', 'JC', 'MC', 'MN', 'MS', 'NT', 'NL', 'OC',
-      'PL', 'QT', 'QR', 'SP', 'SL', 'SR', 'TC', 'TS', 'TL', 'VZ', 'YN',
-      'ZS', 'NE' ];
+    var estado = [ 'AS', 'BC', 'BS', 'CC', 'CS', 'CH', 'CL', 'CM', 'DF', 'DG',
+        'GT', 'GR', 'HG', 'JC', 'MC', 'MN', 'MS', 'NT', 'NL', 'OC', 'PL', 'QT',
+        'QR', 'SP', 'SL', 'SR', 'TC', 'TS', 'TL', 'VZ', 'YN', 'ZS', 'NE' ];
+
     return (estado.indexOf(str.toUpperCase()) > -1);
   }
 
   /**
   * agregaDigitoVerificador()
   * Agrega el dígito que se usa para validar el CURP.
-  * @param {string} curp_str - String que contiene al menos los primeros 17 caracteres del CURP.
+  * @param {string} curp_str - String que contiene los primeros 17 caracteres del CURP.
   */
   function agregaDigitoVerificador(curp_str) {
     // Convierte el CURP en un arreglo
     var curp, caracteres, curpNumerico, suma, digito;
 
-    curp = curp_str.substring(0,17).toUpperCase().split('');
+    curp = curp_str.substring(0, 17).toUpperCase().split('');
     caracteres  = [
-      '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I',
-      'J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
+      'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S',
+      'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ];
 
     // Convierte el curp a un arreglo de números, usando la posición de cada
     // carácter, dentro del arreglo `caracteres`.
-    curpNumerico = curp.map(function(caracter) {
+    curpNumerico = curp.map(function (caracter) {
       return caracteres.indexOf(caracter);
     });
 
-    suma = curpNumerico.reduce(function(prev, valor, indice) {
+    suma = curpNumerico.reduce(function (prev, valor, indice) {
       return prev + (valor * (18 - indice));
     }, 0);
 
     digito = (10 - (suma % 10));
 
-    if(digito === 10) {
+    if (digito === 10) {
       digito = 0;
     }
 
@@ -160,7 +167,7 @@
   function generaCurp(param) {
     var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp;
 
-    if(!estadoValido(param.estado)) {
+    if (!estadoValido(param.estado)) {
       return false;
     }
 
@@ -170,21 +177,21 @@
 
     // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
     // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
-    inicial_nombre = (function(nombre) {
+    inicial_nombre = (function (nombre) {
       var comunes, nombres, primerNombreEsComun;
       comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
       nombres = nombre.toUpperCase().trim().split(/\s+/);
       primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
 
-      if(primerNombreEsComun) {
+      if (primerNombreEsComun) {
         return nombres[1].substring(0, 1);
       }
-      if(!primerNombreEsComun) {
+      if (!primerNombreEsComun) {
         return nombres[0].substring(0, 1);
       }
     }(param.nombre));
 
-    vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0,1);
+    vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
 
     posicion_1_4 = [
@@ -212,15 +219,16 @@
       posicion_14_16,
       param.homonimia || param.fecha_nacimiento[2] > 1999 ? 'A' : 0
     ].join('');
+
     return agregaDigitoVerificador(curp);
   }
 
   // Si es un navegador, exporta 'generaCurp' a una variable global.
   // Si es node.js, exporta esa función en module.exports
-  if(typeof module !== 'undefined' && module.exports ) {
-    module.exports = generaCurp;
-  } else {
+  if (global.hasOwnProperty('window') && global.window === global) {
     global.generaCurp = generaCurp;
+  } else {
+    module.exports = generaCurp;
   }
 
 }(this));
