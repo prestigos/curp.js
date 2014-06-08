@@ -114,6 +114,32 @@
     return (estado.indexOf(str.toUpperCase()) > -1);
   }
 
+
+  /**
+  * normalizaString()
+  * Elimina los acentos, eñes y diéresis que pudiera tener el nombre.
+  * @param {string} str - String con el nombre o los apellidos.
+  */
+  function normalizaString(str) {
+    var origen, destino, salida;
+    origen  = [ 'Ã', 'À', 'Á', 'Ä', 'Â', 'È', 'É', 'Ë', 'Ê', 'Ì', 'Í', 'Ï', 'Î',
+             'Ò', 'Ó', 'Ö', 'Ô', 'Ù', 'Ú', 'Ü', 'Û', 'ã', 'à', 'á', 'ä', 'â',
+             'è', 'é', 'ë', 'ê', 'ì', 'í', 'ï', 'î', 'ò', 'ó', 'ö', 'ô', 'ù',
+             'ú', 'ü', 'û', 'Ñ', 'ñ', 'Ç', 'ç' ];
+    destino = [ 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
+             'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'a', 'a', 'a', 'a', 'a',
+             'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'u',
+             'u', 'u', 'u', 'n', 'n', 'c', 'c' ];
+    str     = str.split('');
+    salida  = str.map(function (char) {
+      var pos = origen.indexOf(char);
+      return (pos > -1) ? destino[pos] : char;
+    });
+
+    return salida.join('');
+  }
+
+
   /**
   * agregaDigitoVerificador()
   * Agrega el dígito que se usa para validar el CURP.
@@ -172,9 +198,9 @@
       return false;
     }
 
-    param.nombre = ajustaCompuesto(param.nombre.toUpperCase()).trim();
-    param.apellido_paterno = ajustaCompuesto(param.apellido_paterno.toUpperCase()).trim();
-    param.apellido_materno = ajustaCompuesto(param.apellido_materno.toUpperCase()).trim();
+    param.nombre = ajustaCompuesto(normalizaString(param.nombre.toUpperCase())).trim();
+    param.apellido_paterno = ajustaCompuesto(normalizaString(param.apellido_paterno.toUpperCase())).trim();
+    param.apellido_materno = ajustaCompuesto(normalizaString(param.apellido_materno.toUpperCase())).trim();
 
     // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
     // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
