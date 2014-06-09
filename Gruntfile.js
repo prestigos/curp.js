@@ -6,16 +6,22 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg     : grunt.file.readJSON('package.json'),
-    jshint  : {
-      all     : ['package.json', 'bower.json', 'curp.js', 'Gruntfile.js']
+    jslint  : {
+      all     : {
+        src : ['package.json', 'bower.json', 'curp.js', 'Gruntfile.js'],
+        directives : {
+          indent : 2,
+          node   : true
+        }
+      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jslint');
 
   // Default task(s).
   grunt.registerTask('default', [
-    'jshint'
+    'jslint'
   ]);
 
 };
