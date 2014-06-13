@@ -244,7 +244,7 @@
       param.sexo.toUpperCase(),
       param.estado.toUpperCase(),
       posicion_14_16,
-      param.homonimia || param.fecha_nacimiento[2] > 1999 ? 'A' : 0
+      param.homonimia || (param.fecha_nacimiento[2] > 1999 ? 'A' : 0)
     ].join('');
 
     return agregaDigitoVerificador(curp);
