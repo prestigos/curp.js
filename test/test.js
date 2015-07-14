@@ -79,6 +79,42 @@ describe('Posiciones 1-4', function() {
   });
 });
 
+describe('Posiciones 14-16', function(){
+  describe('Deberia asignar una "X"', function(){
+    it('cuando la primera consonante interna sea una ñ', function(){
+      persona.setName('alberto', 'oñante', 'rodriguez');
+      var letras = curp(persona).substr(13,3);
+      assert.equal(letras, 'XDL');
+    });
+
+    it('Cuando no existan consonantes internas', function(){
+      persona.setName('andres', 'po', 'barrios');
+      var letras = curp(persona).substr(13,3);
+      assert.equal(letras, 'XRN');
+    });
+
+    it('en la posicion 15 cuando haya un solo apellido', function(){
+      persona.setName('leticia', 'luna', undefined);
+      var letras = curp(persona).substr(13,3);
+      assert.equal(letras, 'NXT');
+    });
+  });
+
+  describe('Deberia utilizar la primera consonante interna del primer nombre', function(){
+    it('cuando este sea compuesto', function(){
+      persona.setName('juan jose', 'alvarado', 'barrios')
+      var letras = curp(persona).substr(13,3);
+      assert.equal(letras, 'LRN')
+    });
+
+    it('Excepto si es maria o jose, en ese caso se usa el segundo nombre', function(){
+      persona.setName('ma. de los angeles', 'moreno', 'sanchez');
+      var letras = curp(persona).substr(13,3);
+      assert.equal(letras, 'RNN');
+    });
+  })
+});
+
 function Persona() {};
 Persona.prototype.setName = function(nombre, apellido_paterno, apellido_materno){
   this.nombre = nombre;
