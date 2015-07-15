@@ -23,6 +23,12 @@ var curp = generaCurp({
 });
 ```
 
+## Pruebas
+
+Para correr las pruebas utiliza el comando:
+
+`npm run mocha`
+
 ## Licencia
 
 MIT ( http://opensource.org/licenses/MIT )

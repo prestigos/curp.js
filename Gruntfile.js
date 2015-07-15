@@ -14,10 +14,16 @@ module.exports = function (grunt) {
           node   : true
         }
       }
+    },
+    mochaTest   : {
+      test  : {
+        src : ['test/**/*.js']
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-jslint');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
   // Default task(s).
   grunt.registerTask('default', [
