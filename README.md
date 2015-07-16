@@ -1,6 +1,8 @@
 curp.js
 =======
 
+[![Build Status](https://travis-ci.org/prestigos/curp.js.png?branch=master)](https://travis-ci.org/prestigos/curp.js)
+
 Función para generar el CURP, de acuerdo a las especificaciones oficiales.
 
 Se puede usar con node.js y directamente en el navegador.
