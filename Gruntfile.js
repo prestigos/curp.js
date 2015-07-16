@@ -8,7 +8,7 @@ module.exports = function (grunt) {
     pkg     : grunt.file.readJSON('package.json'),
     jslint  : {
       all     : {
-        src : ['package.json', 'bower.json', 'curp.js', 'Gruntfile.js'],
+        src : ['package.json', 'bower.json', 'curp.js', 'Gruntfile.js', 'test/**.js'],
         directives : {
           indent : 2,
           node   : true
