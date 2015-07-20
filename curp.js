@@ -79,8 +79,7 @@
 
     return (pad + num).replace(new RegExp('^.*([0-9]{' + ancho + '})$'), '$1');
   }
-  var pad = zeropad.bind(null, 2);
-
+  var pad = zeropad.bind(null, 2), comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
   /**
   * primerConsonante()
   * Saca la primer consonante interna del string, y la devuelve.
@@ -217,15 +216,9 @@
 
     param.nombre = ajustaCompuesto(normalizaString(param.nombre.toUpperCase())).trim();
     param.apellido_paterno = ajustaCompuesto(normalizaString(param.apellido_paterno.toUpperCase())).trim();
-    param.apellido_materno = ajustaCompuesto(normalizaString(param.apellido_materno.toUpperCase())).trim();
 
-    // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
-    // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
-    inicial_nombre = (function (nombre) {
-      var comunes, nombres, primerNombreEsComun;
-      comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
-      nombres = nombre.toUpperCase().trim().split(/\s+/);
-      primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
+    param.apellido_materno = param.apellido_materno || "";
+    param.apellido_materno = ajustaCompuesto(normalizaString(param.apellido_materno.toUpperCase())).trim();
 
     inicial_nombre = extrarInicial(param.nombre);
 
@@ -234,8 +227,13 @@
 
     primera_letra_paterno = param.apellido_paterno.substring(0, 1);
     primera_letra_paterno = primera_letra_paterno === 'Ñ' ? 'X' : primera_letra_paterno;
-    primera_letra_materno = param.apellido_materno.substring(0, 1);
-    primera_letra_materno = primera_letra_materno === 'Ñ' ? 'X' : primera_letra_materno;
+
+    if (!param.apellido_materno || param.apellido_materno === "") {
+      primera_letra_materno = 'X';
+    } else {
+      primera_letra_materno = param.apellido_materno.substring(0, 1);
+      primera_letra_materno = primera_letra_materno === 'Ñ' ? 'X' : primera_letra_materno;
+    }
 
     posicion_1_4 = [
       primera_letra_paterno,
