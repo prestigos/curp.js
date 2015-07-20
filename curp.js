@@ -125,11 +125,11 @@
     origen  = [ 'Ã', 'À', 'Á', 'Ä', 'Â', 'È', 'É', 'Ë', 'Ê', 'Ì', 'Í', 'Ï', 'Î',
              'Ò', 'Ó', 'Ö', 'Ô', 'Ù', 'Ú', 'Ü', 'Û', 'ã', 'à', 'á', 'ä', 'â',
              'è', 'é', 'ë', 'ê', 'ì', 'í', 'ï', 'î', 'ò', 'ó', 'ö', 'ô', 'ù',
-             'ú', 'ü', 'û', 'Ñ', 'ñ', 'Ç', 'ç' ];
+             'ú', 'ü', 'û', 'Ç', 'ç' ];
     destino = [ 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
              'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'a', 'a', 'a', 'a', 'a',
              'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'u',
-             'u', 'u', 'u', 'n', 'n', 'c', 'c' ];
+             'u', 'u', 'u', 'c', 'c' ];
     str     = str.split('');
     salida  = str.map(function (char) {
       var pos = origen.indexOf(char);
@@ -192,7 +192,7 @@
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
-    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp;
+    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno;
 
     if (!estadoValido(param.estado)) {
       return false;
@@ -221,10 +221,17 @@
     vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
 
+
+
+    primera_letra_paterno = param.apellido_paterno.substring(0, 1);
+    primera_letra_paterno = primera_letra_paterno === 'Ñ' ? 'X' : primera_letra_paterno;
+    primera_letra_materno = param.apellido_materno.substring(0, 1);
+    primera_letra_materno = primera_letra_materno === 'Ñ' ? 'X' : primera_letra_materno;
+
     posicion_1_4 = [
-      param.apellido_paterno.substring(0, 1),
+      primera_letra_paterno,
       vocal_apellido,
-      param.apellido_materno.substring(0, 1),
+      primera_letra_materno,
       inicial_nombre
     ].join('');
 
