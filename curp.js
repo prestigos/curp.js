@@ -175,6 +175,23 @@
     return curp_str + digito;
   }
 
+  /**
+   * extraerInicial()
+   * Funcion que extrae la inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
+   * nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
+   * @param {string} nombre - String que representa todos los nombres (excepto los apellidos) separados por espacio
+   */
+  function extrarInicial(nombre) {
+    var nombres, primerNombreEsComun;
+    nombres = nombre.toUpperCase().trim().split(/\s+/);
+    primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
+
+    if (primerNombreEsComun) {
+      return nombres[1].substring(0, 1);
+    }
+
+    return nombres[0].substring(0, 1);
+  }
 
   /**
   * generaCurp()
@@ -192,7 +209,7 @@
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
-    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno;
+    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno, nombres, nombre_a_usar;
 
     if (!estadoValido(param.estado)) {
       return false;
@@ -210,18 +227,10 @@
       nombres = nombre.toUpperCase().trim().split(/\s+/);
       primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
 
-      if (primerNombreEsComun) {
-        return nombres[1].substring(0, 1);
-      }
-      if (!primerNombreEsComun) {
-        return nombres[0].substring(0, 1);
-      }
-    }(param.nombre));
+    inicial_nombre = extrarInicial(param.nombre);
 
     vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
-
-
 
     primera_letra_paterno = param.apellido_paterno.substring(0, 1);
     primera_letra_paterno = primera_letra_paterno === 'Ñ' ? 'X' : primera_letra_paterno;
@@ -237,10 +246,15 @@
 
     posicion_1_4 = filtraInconvenientes(filtraCaracteres(posicion_1_4));
 
+    nombres = param.nombre.split(" ").filter(function (palabra) {
+      return palabra !== "";
+    });
+    nombre_a_usar = comunes.indexOf(nombres[0]) > -1 ? nombres[1] : nombres[0];
+
     posicion_14_16 = [
       primerConsonante(param.apellido_paterno),
       primerConsonante(param.apellido_materno),
-      primerConsonante(param.nombre)
+      primerConsonante(nombre_a_usar)
     ].join('');
 
     curp = [
