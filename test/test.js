@@ -24,7 +24,6 @@ describe('Posiciones 1-4', function () {
   it('Deberia regresar "x" si la primer letra de algun de los nombres es Ñ', function () {
     persona.setName('alberto', 'ñando', 'rodriguez');
     var letras = curp(persona).substr(0, 4);
-    // persona.toString();
     assert.equal(letras, 'XARA');
   });
 
@@ -32,14 +31,12 @@ describe('Posiciones 1-4', function () {
     it('Para Maria', function () {
       persona.setName('maria luisa', 'perez', 'hernandez');
       var letras = curp(persona).substr(0, 4);
-      // persona.toString();
       assert.equal(letras, 'PEHL');
     });
 
     it('Para compuesto regular', function () {
       persona.setName('luis enrique', 'romero', 'palazuelos');
       var letras = curp(persona).substr(0, 4);
-      // persona.toString();
       assert.equal(letras, 'ROPL');
     });
   });
@@ -47,7 +44,6 @@ describe('Posiciones 1-4', function () {
   it('Deberia regresar "X" en caso que un caracter especial como "/" o "-" vaya a ser utilizado en la creacion de la clave', function () {
     persona.setName("juan jose", "d/amico", "alvarez");
     var letras = curp(persona).substr(0, 4);
-    // persona.toString();
     assert.equal(letras, 'DXAJ');
   });
 

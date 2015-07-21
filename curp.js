@@ -79,8 +79,7 @@
 
     return (pad + num).replace(new RegExp('^.*([0-9]{' + ancho + '})$'), '$1');
   }
-  var pad = zeropad.bind(null, 2);
-
+  var pad = zeropad.bind(null, 2), comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
   /**
   * primerConsonante()
   * Saca la primer consonante interna del string, y la devuelve.
@@ -89,7 +88,7 @@
   */
   function primerConsonante(str) {
     str = str.trim().substring(1).replace(/[AEIOU]/ig, '').substring(0, 1);
-    return (str === '') ? 'X' : str;
+    return (str === '' || str === 'Ñ') ? 'X' : str;
   }
 
   /**
@@ -125,11 +124,11 @@
     origen  = [ 'Ã', 'À', 'Á', 'Ä', 'Â', 'È', 'É', 'Ë', 'Ê', 'Ì', 'Í', 'Ï', 'Î',
              'Ò', 'Ó', 'Ö', 'Ô', 'Ù', 'Ú', 'Ü', 'Û', 'ã', 'à', 'á', 'ä', 'â',
              'è', 'é', 'ë', 'ê', 'ì', 'í', 'ï', 'î', 'ò', 'ó', 'ö', 'ô', 'ù',
-             'ú', 'ü', 'û', 'Ñ', 'ñ', 'Ç', 'ç' ];
+             'ú', 'ü', 'û', 'Ç', 'ç' ];
     destino = [ 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
              'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'a', 'a', 'a', 'a', 'a',
              'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'u',
-             'u', 'u', 'u', 'n', 'n', 'c', 'c' ];
+             'u', 'u', 'u', 'c', 'c' ];
     str     = str.split('');
     salida  = str.map(function (char) {
       var pos = origen.indexOf(char);
@@ -175,6 +174,23 @@
     return curp_str + digito;
   }
 
+  /**
+   * extraerInicial()
+   * Funcion que extrae la inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
+   * nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
+   * @param {string} nombre - String que representa todos los nombres (excepto los apellidos) separados por espacio
+   */
+  function extrarInicial(nombre) {
+    var nombres, primerNombreEsComun;
+    nombres = nombre.toUpperCase().trim().split(/\s+/);
+    primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
+
+    if (primerNombreEsComun) {
+      return nombres[1].substring(0, 1);
+    }
+
+    return nombres[0].substring(0, 1);
+  }
 
   /**
   * generaCurp()
@@ -192,7 +208,7 @@
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
-    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp;
+    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno, nombres, nombre_a_usar;
 
     if (!estadoValido(param.estado)) {
       return false;
@@ -200,40 +216,43 @@
 
     param.nombre = ajustaCompuesto(normalizaString(param.nombre.toUpperCase())).trim();
     param.apellido_paterno = ajustaCompuesto(normalizaString(param.apellido_paterno.toUpperCase())).trim();
+
+    param.apellido_materno = param.apellido_materno || "";
     param.apellido_materno = ajustaCompuesto(normalizaString(param.apellido_materno.toUpperCase())).trim();
 
-    // La inicial del primer nombre, o, si tiene mas de 1 nombre Y el primer
-    // nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
-    inicial_nombre = (function (nombre) {
-      var comunes, nombres, primerNombreEsComun;
-      comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
-      nombres = nombre.toUpperCase().trim().split(/\s+/);
-      primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
-
-      if (primerNombreEsComun) {
-        return nombres[1].substring(0, 1);
-      }
-      if (!primerNombreEsComun) {
-        return nombres[0].substring(0, 1);
-      }
-    }(param.nombre));
+    inicial_nombre = extrarInicial(param.nombre);
 
     vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
 
+    primera_letra_paterno = param.apellido_paterno.substring(0, 1);
+    primera_letra_paterno = primera_letra_paterno === 'Ñ' ? 'X' : primera_letra_paterno;
+
+    if (!param.apellido_materno || param.apellido_materno === "") {
+      primera_letra_materno = 'X';
+    } else {
+      primera_letra_materno = param.apellido_materno.substring(0, 1);
+      primera_letra_materno = primera_letra_materno === 'Ñ' ? 'X' : primera_letra_materno;
+    }
+
     posicion_1_4 = [
-      param.apellido_paterno.substring(0, 1),
+      primera_letra_paterno,
       vocal_apellido,
-      param.apellido_materno.substring(0, 1),
+      primera_letra_materno,
       inicial_nombre
     ].join('');
 
     posicion_1_4 = filtraInconvenientes(filtraCaracteres(posicion_1_4));
 
+    nombres = param.nombre.split(" ").filter(function (palabra) {
+      return palabra !== "";
+    });
+    nombre_a_usar = comunes.indexOf(nombres[0]) > -1 ? nombres[1] : nombres[0];
+
     posicion_14_16 = [
       primerConsonante(param.apellido_paterno),
       primerConsonante(param.apellido_materno),
-      primerConsonante(param.nombre)
+      primerConsonante(nombre_a_usar)
     ].join('');
 
     curp = [
