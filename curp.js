@@ -222,7 +222,7 @@
 
     inicial_nombre = extrarInicial(param.nombre);
 
-    vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[^AEIOU]/g, '').substring(0, 1);
+    vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[BCDFGHJKLMNÑPQRSTVWXYZ]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
 
     primera_letra_paterno = param.apellido_paterno.substring(0, 1);
