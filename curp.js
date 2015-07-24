@@ -1,6 +1,7 @@
 /*jslint indent:2, regexp:true*/
 (function (global) {
   'use strict';
+  var comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
   /**
     curp.js
     Función para generar el CURP, de acuerdo a las especificaciones oficiales.
@@ -79,7 +80,6 @@
 
     return (pad + num).replace(new RegExp('^.*([0-9]{' + ancho + '})$'), '$1');
   }
-  var pad = zeropad.bind(null, 2), comunes = [ 'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.' ];
   /**
   * primerConsonante()
   * Saca la primer consonante interna del string, y la devuelve.
@@ -145,9 +145,9 @@
   * @param {string} curp_str - String que contiene los primeros 17 caracteres del CURP.
   */
   function agregaDigitoVerificador(curp_str) {
-    // Convierte el CURP en un arreglo
     var curp, caracteres, curpNumerico, suma, digito;
 
+    // Convierte el CURP en un arreglo
     curp = curp_str.substring(0, 17).toUpperCase().split('');
     caracteres  = [
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
@@ -180,7 +180,7 @@
    * nombre es uno de la lista de nombres comunes, la inicial del segundo nombre
    * @param {string} nombre - String que representa todos los nombres (excepto los apellidos) separados por espacio
    */
-  function extrarInicial(nombre) {
+  function extraerInicial(nombre) {
     var nombres, primerNombreEsComun;
     nombres = nombre.toUpperCase().trim().split(/\s+/);
     primerNombreEsComun = (nombres.length > 1 && comunes.indexOf(nombres[0]) > -1);
@@ -208,8 +208,9 @@
   * Por default es 0 si la fecha de nacimiento es menor o igual a 1999, o A, si es igual o mayor a 2000.
   */
   function generaCurp(param) {
-    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno, nombres, nombre_a_usar;
+    var inicial_nombre, vocal_apellido, posicion_1_4, posicion_14_16, curp, primera_letra_paterno, primera_letra_materno, nombres, nombre_a_usar, pad;
 
+    pad = zeropad.bind(null, 2);
     if (!estadoValido(param.estado)) {
       return false;
     }
@@ -220,7 +221,7 @@
     param.apellido_materno = param.apellido_materno || "";
     param.apellido_materno = ajustaCompuesto(normalizaString(param.apellido_materno.toUpperCase())).trim();
 
-    inicial_nombre = extrarInicial(param.nombre);
+    inicial_nombre = extraerInicial(param.nombre);
 
     vocal_apellido = param.apellido_paterno.trim().substring(1).replace(/[BCDFGHJKLMNÑPQRSTVWXYZ]/g, '').substring(0, 1);
     vocal_apellido = (vocal_apellido === '') ? 'X' : vocal_apellido;
