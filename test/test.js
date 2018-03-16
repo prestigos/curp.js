@@ -120,6 +120,19 @@ describe('Posiciones 14-16', function () {
   });
 });
 
+describe('Usando un curp famoso', function () {
+  it('Deberia dar PXNE como las primeras 4 letras', function () {
+    var curpstr = curp({
+      nombre: 'enrique',
+      apellido_paterno: 'peña',
+      apellido_materno: 'nieto',
+      sexo: 'H',
+      estado: 'MC',
+      fecha_nacimiento: [20, 7, 1966]
+    });
+    assert.equal(curpstr, 'PXNE660720HMCXTN06');
+  });
+});
 
 Persona.prototype.setName = function (nombre, apellido_paterno, apellido_materno) {
   this.nombre = nombre;
