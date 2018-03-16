@@ -4,7 +4,7 @@
   "description": "Función para generar el CURP, de acuerdo a las especificaciones oficiales.",
   "main": "curp.js",
   "scripts": {
-    "test": "grunt",
+    "test": "node_modules/jslint/bin/jslint.js '**/*.js' && node_modules/mocha/bin/mocha",
     "mocha": "grunt mochaTest"
   },
   "repository": {
@@ -23,8 +23,8 @@
   "homepage": "https://github.com/prestigos/curp.js",
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-jslint": "^1.1.12",
+    "grunt-jslint": "1.1.12",
     "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.2.5"
+    "mocha": "2.5.3"
   }
 }
