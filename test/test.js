@@ -117,6 +117,12 @@ describe('Posiciones 14-16', function () {
       var letras = curp(persona).substr(13, 3);
       assert.equal(letras, 'RNN');
     });
+
+    it('Pero si es maria o jose y solo tiene un nombre, debe usar ese', function () {
+      persona.setName('Maria', 'moreno', 'sanchez');
+      var letras = curp(persona).substr(13, 3);
+      assert.equal(letras, 'RNR');
+    });
   });
 });
 

@@ -248,7 +248,7 @@
     nombres = param.nombre.split(" ").filter(function (palabra) {
       return palabra !== "";
     });
-    nombre_a_usar = comunes.indexOf(nombres[0]) > -1 ? nombres[1] : nombres[0];
+    nombre_a_usar = nombres.length > 1 && comunes.indexOf(nombres[0]) > -1 ? nombres[1] : nombres[0];
 
     posicion_14_16 = [
       primerConsonante(param.apellido_paterno),
