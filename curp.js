@@ -140,39 +140,33 @@
 
 
   /**
-  * agregaDigitoVerificador()
-  * Agrega el dígito que se usa para validar el CURP.
-  * @param {string} curp_str - String que contiene los primeros 17 caracteres del CURP.
+  * generarDigitoVerificador()
+  * Genera el dígito verificador del CURP.
+  * @param {string} curp_str - String de 17 o 18 caracteres(el último no lo usa en caso de existir)
   */
-  function agregaDigitoVerificador(curp_str) {
-    var curp, caracteres, curpNumerico, suma, digito;
-
-    // Convierte el CURP en un arreglo
-    curp = curp_str.substring(0, 17).toUpperCase().split('');
+  function generarDigitoVerificador(curp_str) {
+    var suma = 0, curp, caracteres, i, valor;
+    // Convierte el CURP en máyusculas
+    curp = curp_str.toUpperCase();
     caracteres  = [
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
       'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S',
       'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ];
-
-    // Convierte el curp a un arreglo de números, usando la posición de cada
-    // carácter, dentro del arreglo `caracteres`.
-    curpNumerico = curp.map(function (caracter) {
-      return caracteres.indexOf(caracter);
-    });
-
-    suma = curpNumerico.reduce(function (prev, valor, indice) {
-      return prev + (valor * (18 - indice));
-    }, 0);
-
-    digito = (10 - (suma % 10));
-
-    if (digito === 10) {
-      digito = 0;
+    // Sumamos el producto del valor(del arreglo caracteres)
+    // con el multiplicador (18 - i)
+    for (i = 0; i < 17; i += 1) {
+      valor = caracteres.indexOf(curp.charAt(i));
+      suma += (18 - i) * valor;
     }
-
-    return curp_str + digito;
+    // Obtenemos el módulo 10 de la suma: si es distinto de cero
+    // el dígito será diferencia de diez con el módulo
+    if ((suma % 10) > 0) {
+      return 10 - (suma % 10);
+    }
+    return 0;
   }
+
 
   /**
    * extraerInicial()
@@ -267,7 +261,7 @@
       param.homonimia || (param.fecha_nacimiento[2] > 1999 ? 'A' : 0)
     ].join('');
 
-    return agregaDigitoVerificador(curp);
+    return curp + generarDigitoVerificador(curp);
   }
 
   // Si es un navegador, exporta 'generaCurp' a una variable global.
