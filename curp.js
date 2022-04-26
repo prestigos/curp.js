@@ -167,14 +167,6 @@
     return 0;
   }
 
- /**
-  * agregaDigitoVerificador()
-  * Agrega el dígito que se usa para validar el CURP.
-  * @param {string} curp_str - String que contiene los primeros 17 caracteres del CURP.
-  */
-  function agregaDigitoVerificador(curp_str) {
-    return curp_str + generarDigitoVerificador(curp_str);
-  }
 
   /**
    * extraerInicial()
@@ -269,7 +261,7 @@
       param.homonimia || (param.fecha_nacimiento[2] > 1999 ? 'A' : 0)
     ].join('');
 
-    return agregaDigitoVerificador(curp);
+    return curp + generarDigitoVerificador(curp);
   }
 
   // Si es un navegador, exporta 'generaCurp' a una variable global.
